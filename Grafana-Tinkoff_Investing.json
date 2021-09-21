@@ -70,7 +70,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1631855636028,
+  "iteration": 1632115817464,
   "links": [],
   "panels": [
     {
@@ -223,7 +223,7 @@
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineStyle": {
               "fill": "solid"
             },
@@ -267,6 +267,14 @@
                   "fixedColor": "green",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              },
+              {
+                "id": "unit",
+                "value": "currencyRUB"
               }
             ]
           },
@@ -282,6 +290,10 @@
                   "fixedColor": "yellow",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
               }
             ]
           }
@@ -299,7 +311,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "displayMode": "table",
+          "displayMode": "list",
           "placement": "bottom"
         },
         "tooltip": {
@@ -1837,7 +1849,6 @@
     {
       "cacheTimeout": null,
       "datasource": null,
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1884,7 +1895,45 @@
           },
           "unit": "currencyRUB"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TOTAL"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-yellow",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    0,
+                    10
+                  ],
+                  "fill": "dot"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 12,
@@ -1892,7 +1941,7 @@
         "x": 0,
         "y": 31
       },
-      "id": 64,
+      "id": 71,
       "links": [],
       "options": {
         "legend": {
@@ -1916,6 +1965,14 @@
           "interval": "",
           "legendFormat": "{{ name }}",
           "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_yield{account=~\"Tinkoff\",balance_currency=\"RUB\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "TOTAL",
+          "refId": "B"
         }
       ],
       "timeFrom": null,
@@ -2018,13 +2075,204 @@
       "valueName": "current"
     },
     {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "currencyRUB"
+        },
+        "overrides": []
+      },
+      "fontSize": "80%",
+      "format": "currencyUSD",
+      "gridPos": {
+        "h": 10,
+        "w": 11,
+        "x": 0,
+        "y": 43
+      },
+      "id": 72,
+      "interval": null,
+      "legend": {
+        "percentage": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "values": false
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_item{balance_currency=\"RUB\",account=~\"Tinkoff\", currency=\"RUB\"}) by (type) + sum(tcs_yield{balance_currency=\"RUB\",account=~\"Tinkoff\", currency=\"RUB\"}) by (type)",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{ type }}, RUB",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_item{balance_currency=\"RUB\",account=~\"Tinkoff\", currency=\"USD\"}) by (type) + sum(tcs_yield{balance_currency=\"RUB\",account=~\"Tinkoff\", currency=\"USD\"}) by (type)",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{type}}, USD",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_item{balance_currency=\"RUB\",account=~\"Tinkoff\", currency=\"EUR\"}) by (type) + sum(tcs_yield{balance_currency=\"RUB\",account=~\"Tinkoff\", currency=\"EUR\"}) by (type)",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{type}}, EUR",
+          "refId": "D"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Диверсификация портфеля",
+      "type": "piechart",
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "currencyRUB"
+        },
+        "overrides": []
+      },
+      "fontSize": "80%",
+      "format": "currencyRUB",
+      "gridPos": {
+        "h": 10,
+        "w": 9,
+        "x": 15,
+        "y": 43
+      },
+      "id": 73,
+      "interval": null,
+      "legend": {
+        "percentage": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_item{type=\"Currency\",account=~\"Tinkoff\",balance_currency=\"RUB\"}) by (name) + sum(tcs_yield{type=\"Currency\",account=~\"Tinkoff\",balance_currency=\"RUB\"}) by (name)",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{ name }}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Currency",
+      "type": "piechart",
+      "valueName": "current"
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 53
       },
       "id": 62,
       "panels": [],
@@ -2080,13 +2328,51 @@
           },
           "unit": "currencyRUB"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TOTAL"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-yellow",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    0,
+                    10
+                  ],
+                  "fill": "dot"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 44
+        "y": 54
       },
       "id": 63,
       "links": [],
@@ -2112,6 +2398,14 @@
           "interval": "",
           "legendFormat": "{{ name }}",
           "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_yield{account=~\"TinkoffIis\",balance_currency=\"RUB\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "TOTAL",
+          "refId": "B"
         }
       ],
       "timeFrom": null,
@@ -2158,7 +2452,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 44
+        "y": 54
       },
       "id": 53,
       "interval": null,
@@ -2214,13 +2508,462 @@
       "valueName": "current"
     },
     {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "currencyRUB"
+        },
+        "overrides": []
+      },
+      "fontSize": "80%",
+      "format": "currencyUSD",
+      "gridPos": {
+        "h": 10,
+        "w": 11,
+        "x": 0,
+        "y": 66
+      },
+      "id": 13,
+      "interval": null,
+      "legend": {
+        "percentage": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "values": false
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_item{balance_currency=\"RUB\",account=~\"TinkoffIis\", currency=\"RUB\"}) by (type) + sum(tcs_yield{balance_currency=\"RUB\",account=~\"TinkoffIis\", currency=\"RUB\"}) by (type)",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{ type }}, RUB",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_item{balance_currency=\"RUB\",account=~\"TinkoffIis\", currency=\"USD\"}) by (type) + sum(tcs_yield{balance_currency=\"RUB\",account=~\"TinkoffIis\", currency=\"USD\"}) by (type)",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{type}}, USD",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_item{balance_currency=\"RUB\",account=~\"TinkoffIis\", currency=\"EUR\"}) by (type) + sum(tcs_yield{balance_currency=\"RUB\",account=~\"TinkoffIis\", currency=\"EUR\"}) by (type)",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{type}}, EUR",
+          "refId": "D"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Диверсификация портфеля",
+      "type": "piechart",
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "currencyRUB"
+        },
+        "overrides": []
+      },
+      "fontSize": "80%",
+      "format": "currencyRUB",
+      "gridPos": {
+        "h": 10,
+        "w": 9,
+        "x": 15,
+        "y": 66
+      },
+      "id": 70,
+      "interval": null,
+      "legend": {
+        "percentage": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_item{type=\"Currency\",account=~\"TinkoffIis\",balance_currency=\"RUB\"}) by (name) + sum(tcs_yield{type=\"Currency\",account=~\"TinkoffIis\",balance_currency=\"RUB\"}) by (name)",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{ name }}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Currency",
+      "type": "piechart",
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "currencyRUB"
+        },
+        "overrides": []
+      },
+      "fontSize": "80%",
+      "format": "currencyRUB",
+      "gridPos": {
+        "h": 7,
+        "w": 9,
+        "x": 0,
+        "y": 76
+      },
+      "id": 67,
+      "interval": null,
+      "legend": {
+        "percentage": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_item{type=\"Etf\",account=~\"TinkoffIis\",balance_currency=\"RUB\"}) by (name) + sum(tcs_yield{type=\"Etf\",account=~\"TinkoffIis\",balance_currency=\"RUB\"}) by (name)",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{ name }}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "ETF",
+      "type": "piechart",
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "currencyRUB"
+        },
+        "overrides": []
+      },
+      "fontSize": "80%",
+      "format": "currencyRUB",
+      "gridPos": {
+        "h": 7,
+        "w": 7,
+        "x": 9,
+        "y": 76
+      },
+      "id": 69,
+      "interval": null,
+      "legend": {
+        "percentage": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_item{type=\"Stock\",account=~\"TinkoffIis\",balance_currency=\"RUB\"}) by (name) + sum(tcs_yield{type=\"Stock\",account=~\"TinkoffIis\",balance_currency=\"RUB\"}) by (name)",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{ name }}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Stocks",
+      "type": "piechart",
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "currencyRUB"
+        },
+        "overrides": []
+      },
+      "fontSize": "80%",
+      "format": "currencyRUB",
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 76
+      },
+      "id": 68,
+      "interval": null,
+      "legend": {
+        "percentage": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(tcs_item{type=\"Bond\",account=~\"TinkoffIis\",balance_currency=\"RUB\"}) by (name) + sum(tcs_yield{type=\"Bond\",account=~\"TinkoffIis\",balance_currency=\"RUB\"}) by (name)",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{ name }}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Bonds",
+      "type": "piechart",
+      "valueName": "current"
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 56
+        "y": 83
       },
       "id": 31,
       "panels": [],
@@ -2290,7 +3033,7 @@
         "h": 6,
         "w": 8,
         "x": 0,
-        "y": 57
+        "y": 84
       },
       "id": 33,
       "links": [],
@@ -2537,7 +3280,7 @@
         "h": 6,
         "w": 16,
         "x": 8,
-        "y": 57
+        "y": 84
       },
       "id": 65,
       "options": {
@@ -2582,7 +3325,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 63
+        "y": 90
       },
       "id": 8,
       "panels": [],
@@ -2644,7 +3387,7 @@
         "h": 15,
         "w": 12,
         "x": 0,
-        "y": 64
+        "y": 91
       },
       "id": 20,
       "links": [],
@@ -2741,7 +3484,7 @@
         "h": 15,
         "w": 12,
         "x": 12,
-        "y": 64
+        "y": 91
       },
       "id": 58,
       "links": [],
@@ -2789,7 +3532,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 79
+        "y": 106
       },
       "id": 6,
       "panels": [],
@@ -2828,7 +3571,7 @@
         "h": 15,
         "w": 14,
         "x": 0,
-        "y": 80
+        "y": 107
       },
       "id": 12,
       "interval": null,
@@ -2924,9 +3667,9 @@
         "h": 15,
         "w": 10,
         "x": 14,
-        "y": 80
+        "y": 107
       },
-      "id": 13,
+      "id": 66,
       "interval": null,
       "legend": {
         "percentage": true,
@@ -3028,7 +3771,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 95
+        "y": 122
       },
       "id": 55,
       "interval": null,
@@ -3114,7 +3857,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 95
+        "y": 122
       },
       "id": 2,
       "interval": null,
@@ -3200,7 +3943,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 104
+        "y": 131
       },
       "id": 54,
       "interval": null,
@@ -3286,7 +4029,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 104
+        "y": 131
       },
       "id": 57,
       "interval": null,
@@ -3341,7 +4084,7 @@
       "valueName": "current"
     }
   ],
-  "refresh": "",
+  "refresh": "1m",
   "schemaVersion": 30,
   "style": "dark",
   "tags": [],
@@ -3395,5 +4138,5 @@
   "timezone": "",
   "title": "Tinkoff Investing",
   "uid": "4VcbLHI7z",
-  "version": 7
+  "version": 13
 }
